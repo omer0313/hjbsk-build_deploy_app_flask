@@ -1,29 +1,46 @@
-from flask import Flask, render_template, request
-# Import the Maths package here
+from flask import Flask, request, render_template
+from Maths.mathematics import summation, subtraction, multiplication
 
-app = Flask("Mathematics Problem Solver")
+app = Flask(__name__)
 
-@app.route("/sum")
-def sum_route():
-    num1 = float(request.args.get('num1'))
-    num2 = float(request.args.get('num2'))
-    # Write your code here
-
-@app.route("/sub")
-def sub_route():
-    num1 = float(request.args.get('num1'))
-    num2 = float(request.args.get('num2'))
-    # Write your code here
-
-@app.route("/mul")
-def mul_route():
-    num1 = float(request.args.get('num1'))
-    num2 = float(request.args.get('num2'))
-    # Write your code here  
-
+# Ana sayfa (index.html render edilir)
 @app.route("/")
 def render_index_page():
-    # Write your code here
-    
+    return render_template('index.html')
+
+
+# Toplama işlemi
+@app.route("/sum", methods=["GET"])
+def sum_numbers():
+    num1 = float(request.args.get("num1", 0))
+    num2 = float(request.args.get("num2", 0))
+    result = summation(num1, num2)
+    if result.is_integer():
+        result = int(result)
+    return str(result)
+
+
+# Çıkarma işlemi
+@app.route("/sub", methods=["GET"])
+def sub_numbers():
+    num1 = float(request.args.get("num1", 0))
+    num2 = float(request.args.get("num2", 0))
+    result = subtraction(num1, num2)
+    if result.is_integer():
+        result = int(result)
+    return str(result)
+
+
+# Çarpma işlemi
+@app.route("/mul", methods=["GET"])
+def mul_numbers():
+    num1 = float(request.args.get("num1", 0))
+    num2 = float(request.args.get("num2", 0))
+    result = multiplication(num1, num2)
+    if result.is_integer():
+        result = int(result)
+    return str(result)
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    app.run(debug=True)
